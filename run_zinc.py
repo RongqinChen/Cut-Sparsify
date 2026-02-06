@@ -48,16 +48,16 @@ def main():
     for ridx in specified_runs:
         seed_everything((ridx + 1) * 1000)
         datamodule = TestOnValLightningData(train_set, valid_set, test_set)
-        model = TestOnValLightningModel(model, criterion, evaluator)
+        litmodel = TestOnValLightningModel(model, criterion, evaluator)
         timer = Timer(duration=dict(weeks=4))
         trainer = create_trainer(timestamp, ridx, timer)
-        trainer.fit(model, datamodule=datamodule)
-        result_dict = trainer.test(model, datamodule=datamodule, ckpt_path="best")[0]
+        trainer.fit(litmodel, datamodule=datamodule)
+        result_dict = trainer.test(litmodel, datamodule=datamodule, ckpt_path="best")[0]
         result_dict["avg_train_time_epoch"] = timer.time_elapsed("train") / cfg.train.num_epochs
         result_dict = {f"final/{key.replace('/', '_')}": val for key, val in result_dict.items()}
         for key, val in result_dict.items():
             results_allruns[key].append(val)
-        log_final_results(model, results_allruns, len(specified_runs))
+        log_final_results(litmodel, results_allruns, len(specified_runs))
 
 
 if __name__ == "__main__":

@@ -11,15 +11,14 @@ model:
   node_encoder: ogb
   edge_encoder: ogb
   pe_encoder: linear
-  hidden_dim: 96
-  attn_heads: 8
-  attn_drop_prob: 0.5
+  hidden_dim: 140
   num_layers: 4
-  mlp_depth: 2
+  mlp_depth: 1
   pooling: avg
-  drop_prob: 0.05
+  drop_prob: 0.2
+  output_drop_prob: 0.2
   jk_mode: last
-  task_type: graph_regression
+  task_type: mlpgraphhead
   num_tasks: 11
   norm_type: batch
   act_type: relu

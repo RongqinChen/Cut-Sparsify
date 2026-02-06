@@ -35,6 +35,7 @@ class BCEWithLogitsLoss(torch.nn.BCEWithLogitsLoss):
 def main():
     args = parse_args()
     cfg = load_cfg(args)
+    model = make_model()
 
     # ======== load dataset ==============
     train_set = LRGBDataset("peptides-func", cfg.dataset.path, "train", cfg.dataset.full_pre_transform,
@@ -54,18 +55,18 @@ def main():
     for ridx in specified_runs:
         seed_everything((ridx + 1) * 1000)
         datamodule = TestOnValLightningData(train_set, valid_set, test__set)
-        model = TestOnValLightningModel(make_model(), criterion, evaluator)
+        litmodel = TestOnValLightningModel(model, criterion, evaluator)
         timer = Timer(duration=dict(weeks=4))
         mcfg = cfg.model
         run_label = f"{ridx}-{mcfg.pooling}-{mcfg.drop_prob}-{mcfg.output_drop_prob}"
         trainer = create_trainer(timestamp, run_label, timer)
-        trainer.fit(model, datamodule=datamodule)
-        result_dict = trainer.test(model, datamodule=datamodule, ckpt_path="best")[0]
+        trainer.fit(litmodel, datamodule=datamodule)
+        result_dict = trainer.test(litmodel, datamodule=datamodule, ckpt_path="best")[0]
         result_dict["avg_train_time_epoch"] = timer.time_elapsed("train") / cfg.train.num_epochs
         result_dict = {f"final/{key.replace('/', '_')}": val for key, val in result_dict.items()}
         for key, val in result_dict.items():
             results_allruns[key].append(val)
-        log_final_results(model, results_allruns, len(specified_runs))
+        log_final_results(litmodel, results_allruns, len(specified_runs))
 
 
 if __name__ == "__main__":
