@@ -7,7 +7,7 @@ dataset:
     2fwl_bsr: {}
   follow_batch: [pair_x]
 model:
-  name: 2fwl_bsr
+  name: sppgn
   node_encoder: ogb
   edge_encoder: ogb
   loop_encoder: linear

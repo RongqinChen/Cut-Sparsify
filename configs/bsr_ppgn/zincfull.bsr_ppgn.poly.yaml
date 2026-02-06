@@ -1,6 +1,6 @@
 dataset:
   path: data/ZINC
-  node_attr_dim: 21 # actually 21 in Zinc-12k, 28 in Zinc-full
+  node_attr_dim: 28 # actually 21 in Zinc-12k, 28 in Zinc-full
   edge_attr_dim: 4
   poly_dim: 22
   inmemory_transform:
@@ -9,10 +9,11 @@ dataset:
     2fwl_bsr: {}
   follow_batch: [pair_x]
 model:
-  name: 2fwl_bsr
+  name: sppgn
   node_encoder: type_dict
   edge_encoder: type_dict
-  pe_encoder: poly
+  loop_encoder: linear
+  pair_encoder: linear
   hidden_dim: 80
   num_layers: 10
   mlp_depth: 2
@@ -26,8 +27,8 @@ model:
   use_sqrt: true
 train:
   runs: 5
-  save_dir: results/zinc
-  batch_size: 32
+  save_dir: results/zincfull
+  batch_size: 256
   num_workers: 0
   lr: 1e-3
   min_lr: 1e-6

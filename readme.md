@@ -39,10 +39,10 @@ done
 ### For ZINC
 
 ```bash
-for poly_dim in 6 8 10 12 14
+for poly_dim in 4 8 10 12 14
 do
 
-python run_zinc.py --cfg configs/sppgn/zinc.sppgn.poly.yaml --poly_dim $poly_dim 
+python run_zinc.py --cfg configs/bsr_ppgn/zinc.bsr_ppgn.poly.yaml --poly_dim $poly_dim 
 
 done
 ```
