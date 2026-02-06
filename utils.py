@@ -286,14 +286,15 @@ def create_trainer(
         print("Warning: Environment variable 'MACHINE' is not set.")
 
     cfg_label = _build_config_label()
-    save_subdir = sanitize_path(f"{cfg.train.save_dir}/{timestamp}")
-    os.makedirs(save_subdir, exist_ok=True)
+    save_dir = str(cfg.train.save_dir)
+    os.makedirs(save_dir, exist_ok=True)
 
     logger = CSVLogger(
-        save_dir=save_subdir,
+        save_dir=save_dir,
         name=f"{run_label}-{cfg_label}",
+        version=str(timestamp)
     )
-    
+
     trainer = Trainer(
         accelerator="gpu",
         devices=1,
