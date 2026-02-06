@@ -10,26 +10,28 @@ from models.output_decoder import output_decoder_dict
 class SPPGNLayer(nn.Module):
     """Single layer of the Simplified Provably Powerful Graph Network."""
 
-    def __init__(self, hidden_dim: int, use_sqrt: bool, drop_prob: float):
+    def __init__(self, mlp_depth: int, hidden_dim: int, use_sqrt: bool, drop_prob: float):
         super().__init__()
+        self.mlp_depth = mlp_depth
         self.use_sqrt = use_sqrt
         self.hidden_dim = hidden_dim
 
         # Create MLP blocks for feature transformation
-        self.mlp1 = self._create_mlp_block(hidden_dim, hidden_dim, drop_prob)
-        self.mlp2 = self._create_mlp_block(hidden_dim, hidden_dim, drop_prob)
-        self.upd = self._create_mlp_block(hidden_dim * 2, hidden_dim, drop_prob)
+        self.mlp1 = self._create_mlp_block(mlp_depth, hidden_dim, hidden_dim, drop_prob)
+        self.mlp2 = self._create_mlp_block(mlp_depth, hidden_dim, hidden_dim, drop_prob)
+        self.upd = self._create_mlp_block(mlp_depth, hidden_dim * 2, hidden_dim, drop_prob)
 
     @staticmethod
-    def _create_mlp_block(in_dim: int, out_dim: int, drop_prob: float) -> nn.Sequential:
+    def _create_mlp_block(mlp_depth: int, in_dim: int, out_dim: int, drop_prob: float) -> nn.Sequential:
         """Create a standard MLP block with BatchNorm, ReLU, and Dropout."""
-        return nn.Sequential(
-            nn.Linear(in_dim, out_dim),
-            nn.BatchNorm1d(out_dim),
-            nn.ReLU(),
-            nn.Dropout(drop_prob),
-            nn.Linear(out_dim, out_dim),
-        )
+        layers = [nn.Linear(in_dim, out_dim)]
+        for _ in range(mlp_depth):
+            layers += [
+                nn.BatchNorm1d(out_dim),
+                nn.ReLU(),
+                nn.Dropout(drop_prob),
+                nn.Linear(out_dim, out_dim),
+            ]
 
     def forward(self, data: dict) -> dict:
         idx0, idx1, idx2 = data["triple_index"]

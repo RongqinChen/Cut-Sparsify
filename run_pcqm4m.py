@@ -2,7 +2,6 @@ import argparse
 from collections import defaultdict
 from datetime import datetime
 
-import swanlab
 import torch
 from lightning.pytorch import seed_everything
 from lightning.pytorch.callbacks import Timer
@@ -57,7 +56,7 @@ def main():
         datamodule = TestOnValLightningData(*dataset.get_split())
         model = TestOnValLightningModel(make_model(), criterion, evaluator)
         timer = Timer(duration=dict(weeks=4))
-        logger, trainer = create_trainer(timestamp, ridx, timer, enable_progress_bar=True)
+        trainer = create_trainer(timestamp, ridx, timer, enable_progress_bar=True)
         trainer.fit(model, datamodule=datamodule)
         result_dict = trainer.test(model, datamodule=datamodule, ckpt_path="best")[0]
         result_dict["avg_train_time_epoch"] = timer.time_elapsed("train") / cfg.train.num_epochs
@@ -65,8 +64,6 @@ def main():
         for key, val in result_dict.items():
             results_allruns[key].append(val)
         log_final_results(model, results_allruns, len(specified_runs))
-        swanlab.finish()
-        torch.cuda.empty_cache()
 
 
 if __name__ == "__main__":

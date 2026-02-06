@@ -1,5 +1,3 @@
-# To get all data logged automatically, import comet_ml before the following modules: torch, sklearn.
-import comet_ml  # noqa
 import argparse
 from collections import defaultdict
 from datetime import datetime
@@ -60,7 +58,7 @@ def main():
         timer = Timer(duration=dict(weeks=4))
         mcfg = cfg.model
         run_label = f"{ridx}-{mcfg.pooling}-{mcfg.drop_prob}-{mcfg.output_drop_prob}"
-        logger, trainer = create_trainer(timestamp, run_label, timer)
+        trainer = create_trainer(timestamp, run_label, timer)
         trainer.fit(model, datamodule=datamodule)
         result_dict = trainer.test(model, datamodule=datamodule, ckpt_path="best")[0]
         result_dict["avg_train_time_epoch"] = timer.time_elapsed("train") / cfg.train.num_epochs
@@ -68,7 +66,6 @@ def main():
         for key, val in result_dict.items():
             results_allruns[key].append(val)
         log_final_results(model, results_allruns, len(specified_runs))
-        logger._experiment.end()
 
 
 if __name__ == "__main__":
