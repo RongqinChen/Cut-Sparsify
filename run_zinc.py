@@ -1,6 +1,7 @@
 import argparse
 from collections import defaultdict
 from datetime import datetime
+
 import torch
 from lightning.pytorch import seed_everything
 from lightning.pytorch.callbacks import Timer
@@ -53,7 +54,6 @@ def main():
         result_dict = trainer.test(model, datamodule=datamodule, ckpt_path="best")[0]
         result_dict["avg_train_time_epoch"] = timer.time_elapsed("train") / cfg.train.num_epochs
         result_dict = {f"final/{key.replace('/', '_')}": val for key, val in result_dict.items()}
-        logger.log_metrics(result_dict)
         for key, val in result_dict.items():
             results_allruns[key].append(val)
         log_final_results(model, results_allruns, len(specified_runs))

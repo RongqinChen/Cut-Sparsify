@@ -12,7 +12,7 @@ from datasets import PCQM4Mv2
 from evaluators import RegressionEvaluator
 from lighting_interface import TestOnValLightningData, TestOnValLightningModel
 from models.model_construction import make_model
-from utils import load_cfg, log_final_results, make_logger_trainer
+from utils import load_cfg, log_final_results, create_trainer
 torch.set_num_threads(8)
 
 
@@ -57,12 +57,11 @@ def main():
         datamodule = TestOnValLightningData(*dataset.get_split())
         model = TestOnValLightningModel(make_model(), criterion, evaluator)
         timer = Timer(duration=dict(weeks=4))
-        logger, trainer = make_logger_trainer(timestamp, ridx, timer, enable_progress_bar=True)
+        logger, trainer = create_trainer(timestamp, ridx, timer, enable_progress_bar=True)
         trainer.fit(model, datamodule=datamodule)
         result_dict = trainer.test(model, datamodule=datamodule, ckpt_path="best")[0]
         result_dict["avg_train_time_epoch"] = timer.time_elapsed("train") / cfg.train.num_epochs
         result_dict = {f"final/{key.replace('/', '_')}": val for key, val in result_dict.items()}
-        logger.log_metrics(result_dict)
         for key, val in result_dict.items():
             results_allruns[key].append(val)
         log_final_results(model, results_allruns, len(specified_runs))

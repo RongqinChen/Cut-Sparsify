@@ -11,7 +11,7 @@ from datasets import LRGBDataset
 from evaluators import MultilabelClassificationEvaluator
 from lighting_interface import TestOnValLightningData, TestOnValLightningModel
 from models.model_construction import make_model
-from utils import load_cfg, log_final_results, make_logger_trainer
+from utils import load_cfg, log_final_results, create_trainer
 torch.set_num_threads(8)
 
 
@@ -60,12 +60,11 @@ def main():
         timer = Timer(duration=dict(weeks=4))
         mcfg = cfg.model
         run_label = f"{ridx}-{mcfg.pooling}-{mcfg.drop_prob}-{mcfg.output_drop_prob}"
-        logger, trainer = make_logger_trainer(timestamp, run_label, timer)
+        logger, trainer = create_trainer(timestamp, run_label, timer)
         trainer.fit(model, datamodule=datamodule)
         result_dict = trainer.test(model, datamodule=datamodule, ckpt_path="best")[0]
         result_dict["avg_train_time_epoch"] = timer.time_elapsed("train") / cfg.train.num_epochs
         result_dict = {f"final/{key.replace('/', '_')}": val for key, val in result_dict.items()}
-        logger.log_metrics(result_dict)
         for key, val in result_dict.items():
             results_allruns[key].append(val)
         log_final_results(model, results_allruns, len(specified_runs))

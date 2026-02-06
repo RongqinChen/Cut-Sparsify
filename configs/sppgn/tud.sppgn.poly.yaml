@@ -11,8 +11,7 @@ model:
   name: sppgn
   node_encoder: linear
   edge_encoder: linear
-  loop_encoder: linear
-  pair_encoder: linear
+  pe_encoder: linear
   hidden_dim: 64
   num_layers: 4
   mlp_depth: 2

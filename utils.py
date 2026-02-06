@@ -9,7 +9,7 @@ import numpy as np
 import torch
 import yaml
 from lightning.pytorch import Trainer
-# from lightning.pytorch.callbacks import LearningRateMonitor, ModelCheckpoint
+from lightning.pytorch.callbacks import ModelCheckpoint
 from lightning.pytorch.loggers import CSVLogger
 from torch_geometric.transforms import Compose
 
@@ -298,17 +298,17 @@ def create_trainer(
         accelerator="gpu",
         devices=1,
         max_epochs=cfg.train.num_epochs,
-        enable_checkpointing=False,
+        enable_checkpointing=True,
         enable_progress_bar=enable_progress_bar,
         logger=logger,
         gradient_clip_algorithm="norm",
         gradient_clip_val=1.0,
         callbacks=[
-            # ModelCheckpoint(
-            #     monitor=cfg.log.monitor,
-            #     mode=cfg.log.monitor_mode,
-            #     every_n_epochs=cfg.train.ckpt_period
-            # ),
+            ModelCheckpoint(
+                monitor=cfg.log.monitor,
+                mode=cfg.log.monitor_mode,
+                every_n_epochs=cfg.train.ckpt_period
+            ),
             timer
         ],
         log_every_n_steps=cfg.train.log_every_n_steps,

@@ -12,7 +12,7 @@ model:
   name: sppgn
   node_encoder: type_dict
   edge_encoder: type_dict
-  pe_encoder: poly
+  pe_encoder: linear
   hidden_dim: 80
   num_layers: 10
   mlp_depth: 2

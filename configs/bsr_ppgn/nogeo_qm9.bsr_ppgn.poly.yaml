@@ -11,7 +11,7 @@ model:
   name: sppgn
   node_encoder: qm9
   edge_encoder: qm9
-  pe_encoder: poly
+  pe_encoder: linear
   hidden_dim: 80
   num_layers: 10
   mlp_depth: 2
