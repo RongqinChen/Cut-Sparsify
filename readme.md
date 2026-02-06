@@ -100,3 +100,19 @@ CUDA_VISIBLE_DEVICES=0 python run_pcqm4m.py \
 done
 
 ```
+
+### For Pep-func
+
+```bash
+source ~/miniforge3/bin/activate gnn270
+
+for poly_dim in 8
+do
+
+CUDA_VISIBLE_DEVICES=0 python run_peptides_func.py \
+    --cfg configs/bsr_ppgn/pep_func.bsr_ppgn.poly.yaml \
+    --poly_dim $poly_dim | tee results/log_func_${poly_dim}.txt
+
+done
+
+```

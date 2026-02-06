@@ -64,6 +64,7 @@ class SPPGN(nn.Module):
     def __init__(self) -> None:
         super().__init__()
         self.hidden_dim = cfg.model.hidden_dim
+        self.mlp_depth = cfg.model.mlp_depth
         self.num_layers = cfg.model.num_layers
         self.use_sqrt = True
         self.drop_prob = cfg.model.drop_prob
@@ -72,7 +73,7 @@ class SPPGN(nn.Module):
         # Initialize layers
         self.init_layer = InitLayer()
         self.layers = nn.ModuleList([
-            SPPGNLayer(self.hidden_dim, self.use_sqrt, self.drop_prob)
+            SPPGNLayer(self.mlp_depth, self.hidden_dim, self.use_sqrt, self.drop_prob)
             for _ in range(self.num_layers)
         ])
 
