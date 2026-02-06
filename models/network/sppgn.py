@@ -24,14 +24,21 @@ class SPPGNLayer(nn.Module):
     @staticmethod
     def _create_mlp_block(mlp_depth: int, in_dim: int, out_dim: int, drop_prob: float) -> nn.Sequential:
         """Create a standard MLP block with BatchNorm, ReLU, and Dropout."""
-        layers = [nn.Linear(in_dim, out_dim)]
-        for _ in range(mlp_depth - 1):
-            layers += [
-                nn.BatchNorm1d(out_dim),
-                nn.ReLU(),
-                nn.Dropout(drop_prob),
-                nn.Linear(out_dim, out_dim),
-            ]
+        layers = [
+            nn.Linear(in_dim, out_dim),
+            nn.BatchNorm1d(out_dim),
+            nn.ReLU(),
+            nn.Dropout(drop_prob),
+        ]
+        if mlp_depth > 1:
+            for _ in range(mlp_depth - 2):
+                layers += [
+                    nn.BatchNorm1d(out_dim),
+                    nn.ReLU(),
+                    nn.Dropout(drop_prob),
+                    nn.Linear(out_dim, out_dim),
+                ]
+            layers += [nn.Linear(out_dim, out_dim)]
         return nn.Sequential(*layers)
 
     def forward(self, data: dict) -> dict:

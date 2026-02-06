@@ -36,7 +36,6 @@ class LRGBDataset(PyG_LRGBDataset):
 
     def _inmemory_process(self, inmemory_transform):
         data_list = self._seperate_data()
-        print(f"Computing {inmemory_transform}")
         time_start = time.perf_counter()
         data_list = [inmemory_transform(data) for data in tqdm(data_list)]
         time_elapsed = time.perf_counter() - time_start
