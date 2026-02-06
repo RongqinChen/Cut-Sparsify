@@ -28,6 +28,7 @@ def parse_args() -> argparse.Namespace:
 def main():
     args = parse_args()
     cfg = load_cfg(args)
+    model = make_model()
 
     # ======== load dataset ==============
     train_set = ZINC(cfg.dataset.path, True, "train",
@@ -47,7 +48,7 @@ def main():
     for ridx in specified_runs:
         seed_everything((ridx + 1) * 1000)
         datamodule = TestOnValLightningData(train_set, valid_set, test_set)
-        model = TestOnValLightningModel(make_model(), criterion, evaluator)
+        model = TestOnValLightningModel(model, criterion, evaluator)
         timer = Timer(duration=dict(weeks=4))
         trainer = create_trainer(timestamp, ridx, timer)
         trainer.fit(model, datamodule=datamodule)

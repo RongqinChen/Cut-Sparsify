@@ -24,7 +24,10 @@ def make_model() -> nn.Module:
                       f"Available models: {list(network_dict.keys())}")
     
     gnn = network_dict[model_name]()
-    print(f"Created model: {model_name}")
+    print("="*80)
     print(gnn)
-    
+    num_params = sum(p.numel() for p in gnn.parameters())
+    print(f"Number of parameters: {num_params}")
+    print("="*80)
+
     return gnn

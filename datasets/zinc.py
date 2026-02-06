@@ -82,8 +82,7 @@ class ZINC(PyG_ZINC):
             inmemory_transform: Transform function to apply to each data object.
         """
         data_list = self._separate_data()
-        print(f"Computing {inmemory_transform.__name__ if hasattr(inmemory_transform, '__name__') else inmemory_transform}")
-        
+
         time_start = time.perf_counter()
         transformed_data = [inmemory_transform(data) for data in tqdm(data_list, desc="Transforming")]
         time_elapsed = time.perf_counter() - time_start
