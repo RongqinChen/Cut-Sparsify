@@ -32,6 +32,7 @@ class SPPGNLayer(nn.Module):
                 nn.Dropout(drop_prob),
                 nn.Linear(out_dim, out_dim),
             ]
+        return nn.Sequential(*layers)
 
     def forward(self, data: dict) -> dict:
         idx0, idx1, idx2 = data["triple_index"]
@@ -59,7 +60,27 @@ class SPPGNLayer(nn.Module):
 
 
 class SPPGN(nn.Module):
-    """Subgraph Positional Pair Graph Network for graph-level predictions."""
+    """Simplified PPGN implementation for graph neural networks.
+
+    This model consists of four main components:
+    1. Input encoding layer
+    2. Multiple aggregation and update blocks
+    3. Readout layer with jumping knowledge
+    4. Output decoding layer
+
+    All hyperparameters are retrieved from the global configuration (cfg.model).
+
+    Args:
+        Configuration is pulled from cfg.model with the following parameters:
+        - hidden_dim (int): Hidden dimension size.
+        - num_layers (int): Number of message passing layers.
+        - mlp_depth (int): Depth of MLPs in each block.
+        - pooling (str): Graph pooling method ('avg' or 'sum').
+        - drop_prob (float): Dropout probability.
+        - jk_mode (str): Jumping knowledge mode ('last', 'concat', or 'lstm').
+        - task_type (str): Type of task (e.g., 'graph_classification', 'graph_regression').
+        - num_tasks (int): Number of prediction tasks.
+    """
 
     def __init__(self) -> None:
         super().__init__()
