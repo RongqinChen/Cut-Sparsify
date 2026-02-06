@@ -49,7 +49,6 @@ CUDA_VISIBLE_DEVICES=0 python run_zinc.py \
     --poly_dim $poly_dim | tee results/log_zinc_${poly_dim}.txt
 
 done
-
 ```
 
 ### For ZINC-Full
@@ -65,7 +64,6 @@ CUDA_VISIBLE_DEVICES=0 python run_zincfull.py \
     --poly_dim $poly_dim | tee results/log_zinc_${poly_dim}.txt
 
 done
-
 ```
 
 
@@ -82,7 +80,6 @@ CUDA_VISIBLE_DEVICES=0 python run_qm9_nogeo.py \
     --poly_dim $poly_dim | tee results/log_qm9_nogeo_${poly_dim}.txt
 
 done
-
 ```
 
 ### For PCQM4M
@@ -98,7 +95,6 @@ CUDA_VISIBLE_DEVICES=0 python run_pcqm4m.py \
     --poly_dim $poly_dim | tee results/log_pcqm4m_${poly_dim}.txt
 
 done
-
 ```
 
 ### For Pep-func
@@ -114,5 +110,19 @@ CUDA_VISIBLE_DEVICES=0 python run_peptides_func.py \
     --poly_dim $poly_dim | tee results/log_func_${poly_dim}.txt
 
 done
+```
 
+### For Pep-struct
+
+```bash
+source ~/miniforge3/bin/activate gnn270
+
+for poly_dim in 8
+do
+
+CUDA_VISIBLE_DEVICES=0 python run_peptides_struct.py \
+    --cfg configs/bsr_ppgn/pep_str.bsr_ppgn.poly.yaml \
+    --poly_dim $poly_dim | tee results/log_struct_${poly_dim}.txt
+
+done
 ```

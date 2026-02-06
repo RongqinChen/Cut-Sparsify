@@ -25,7 +25,7 @@ class SPPGNLayer(nn.Module):
     def _create_mlp_block(mlp_depth: int, in_dim: int, out_dim: int, drop_prob: float) -> nn.Sequential:
         """Create a standard MLP block with BatchNorm, ReLU, and Dropout."""
         layers = [nn.Linear(in_dim, out_dim)]
-        for _ in range(mlp_depth):
+        for _ in range(mlp_depth - 1):
             layers += [
                 nn.BatchNorm1d(out_dim),
                 nn.ReLU(),
