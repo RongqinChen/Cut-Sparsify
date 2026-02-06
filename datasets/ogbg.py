@@ -1,7 +1,7 @@
 import time
 from typing import Any, Callable
 
-from ogb.graphproppred import PygGraphPropPredDataset as PyG_OGBG
+from .pyg_ogbg import PygGraphPropPredDataset as PyG_OGBG
 from torch_geometric.data.separate import separate
 from tqdm import tqdm
 

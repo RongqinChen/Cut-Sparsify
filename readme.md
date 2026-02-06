@@ -20,15 +20,15 @@ pip install rdkit pytorch_lightning
 ### For TUD
 
 ```bash
-for poly_dim in 8 12 14 16
+for poly_dim in 4 6 8 12 14 16
 do
 for num_layers in 4
 do
-for dname in MUTAG PROTEINS_full ENZYMES  
+for dname in FRANKENSTEIN NCI1 NCI109 ENZYMES  
 do
 
-python run_tud.py --cfg configs/sppgn/tud.sppgn.poly.yaml \
-    --poly_method rrwp --poly_dim $poly_dim  --dataname $dname
+CUDA_VISIBLE_DEVICES=1 python run_tud.py --cfg configs/bsr_ppgn/tud.bsr_ppgn.poly.yaml \
+    --poly_method rrwp --poly_dim $poly_dim  --dataname $dname | tee results/log_${dname}_${poly_dim}_${num_layers}.txt
 
 done
 done
@@ -39,33 +39,64 @@ done
 ### For ZINC
 
 ```bash
-for poly_dim in 4 8 10 12 14
+source ~/miniforge3/bin/activate gnn270
+
+for poly_dim in 4 6 8 10 12 14 16
 do
 
-python run_zinc.py --cfg configs/bsr_ppgn/zinc.bsr_ppgn.poly.yaml --poly_dim $poly_dim 
+CUDA_VISIBLE_DEVICES=0 python run_zinc.py \
+    --cfg configs/bsr_ppgn/zinc.bsr_ppgn.poly.yaml \
+    --poly_dim $poly_dim | tee results/log_zinc_${poly_dim}.txt
 
 done
+
 ```
 
 ### For ZINC-Full
 
 ```bash
-for poly_dim in 6 8 10 12 14
+source ~/miniforge3/bin/activate gnn270
+
+for poly_dim in 4 6 8 10 12 14 16
 do
 
-python run_zinc.py --cfg configs/sppgn/zincfull.sppgn.poly.yaml --poly_dim $poly_dim 
+CUDA_VISIBLE_DEVICES=0 python run_zincfull.py \
+    --cfg configs/bsr_ppgn/zincfull.bsr_ppgn.poly.yaml \
+    --poly_dim $poly_dim | tee results/log_zinc_${poly_dim}.txt
 
 done
+
 ```
 
 
 ### For QM9
 
 ```bash
-for poly_dim in 6 8 10 12 14
+source ~/miniforge3/bin/activate gnn270
+
+for poly_dim in 14 12 10 8 6 4
 do
 
-python run_zinc.py --cfg configs/sppgn/nogeo_qm9.sppgn.poly.yaml --poly_dim $poly_dim 
+CUDA_VISIBLE_DEVICES=0 python run_qm9_nogeo.py \
+    --cfg configs/bsr_ppgn/nogeo_qm9.bsr_ppgn.poly.yaml \
+    --poly_dim $poly_dim | tee results/log_qm9_nogeo_${poly_dim}.txt
 
 done
+
+```
+
+### For PCQM4M
+
+```bash
+source ~/miniforge3/bin/activate gnn270
+
+for poly_dim in 8
+do
+
+CUDA_VISIBLE_DEVICES=0 python run_pcqm4m.py \
+    --cfg configs/bsr_ppgn/pcqm4m.bsr_ppgn.poly.yaml \
+    --poly_dim $poly_dim | tee results/log_pcqm4m_${poly_dim}.txt
+
+done
+
 ```

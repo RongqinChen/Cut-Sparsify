@@ -19,7 +19,6 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='PCQM4Mv2')
     parser.add_argument('--cfg', dest='cfg_file', type=str)
     parser.add_argument('--poly_method', type=str)
-    parser.add_argument('--poly_dim', type=int)
     parser.add_argument('--specified_run', type=int, nargs="+")
     parser.add_argument('--local_log', action="store_true", help='Use log service locally.')
     return parser.parse_args()
