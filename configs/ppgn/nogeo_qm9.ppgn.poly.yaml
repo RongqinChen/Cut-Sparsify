@@ -1,0 +1,39 @@
+dataset:
+  path: data/QM9
+  poly_dim: 8
+  inmemory_transform:
+    poly:
+      poly_method: rrwp
+    qm9_input_transform: {}
+model:
+  name: ppgn
+  node_encoder: qm9
+  edge_encoder: qm9
+  loop_encoder: linear
+  pair_encoder: linear
+  hidden_dim: 80
+  num_layers: 10
+  mlp_depth: 2
+  pooling: avg
+  drop_prob: 0.1
+  output_drop_prob: 0.1
+  jk_mode: last
+  task_type: graph_regression
+  max_num_nodes: 29
+  num_tasks: 1
+  norm_type: batch
+  act_type: relu
+  use_pair_pos: True
+  use_sqrt: true
+train:
+  runs: 1
+  save_dir: results/qm9
+  batch_size: 128
+  num_workers: 0
+  lr: 1e-3
+  min_lr: 1e-6
+  weight_decay: 0
+  num_warmup_epochs: 10
+  num_epochs: 350
+  optimizer: AdamW
+  scheduler: cosine_with_warmup

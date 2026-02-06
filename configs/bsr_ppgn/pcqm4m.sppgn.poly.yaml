@@ -1,0 +1,38 @@
+dataset:
+  path: data
+  poly_dim: 16
+  onthefly_transform:
+    poly:
+      poly_method: rrwp
+    2fwl_bsr: {}
+  follow_batch: [pair_x]
+model:
+  name: 2fwl_bsr
+  node_encoder: ogb
+  edge_encoder: ogb
+  loop_encoder: linear
+  pair_encoder: linear
+  hidden_dim: 224
+  num_layers: 16
+  mlp_depth: 2
+  pooling: avg
+  drop_prob: 0.0
+  jk_mode: last
+  task_type: graph_regression
+  num_tasks: 1
+  norm_type: batch
+  act_type: relu
+  max_num_nodes: 51
+train:
+  runs: 1
+  save_dir: results/pcqm4m
+  batch_size: 256
+  num_workers: 0
+  lr: 2e-4
+  min_lr: 1e-6
+  weight_decay: 0
+  num_warmup_epochs: 10
+  test_eval_interval: 10
+  num_epochs: 150
+  optimizer: AdamW
+  scheduler: cosine_with_warmup
