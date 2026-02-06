@@ -18,7 +18,7 @@ from transforms import transform_dict
 
 class Config:
     """Global configuration class with nested configuration sections."""
-    
+
     cfg_file: str = ''
 
     class Dataset:
@@ -104,10 +104,10 @@ cfg = Config()
 
 def _convert_value(val: Any) -> Union[int, float, Any]:
     """Convert value to appropriate type (int, float, or original).
-    
+
     Args:
         val: Value to convert
-        
+
     Returns:
         Converted value as int, float, or original type
     """
@@ -120,11 +120,11 @@ def _convert_value(val: Any) -> Union[int, float, Any]:
 
 def _build_transforms(transform_config: Dict[str, Dict], custom_args: Dict) -> Union[Compose, Any]:
     """Build transformation pipeline from configuration.
-    
+
     Args:
         transform_config: Dictionary of transform names and parameters
         custom_args: Additional arguments to inject into transforms
-        
+
     Returns:
         Single transform or Compose of multiple transforms
     """
@@ -132,16 +132,16 @@ def _build_transforms(transform_config: Dict[str, Dict], custom_args: Dict) -> U
     for transform_name, params in transform_config.items():
         params.update(custom_args)
         transforms.append(transform_dict[transform_name](**params))
-    
+
     return Compose(transforms) if len(transforms) > 1 else transforms[0] if transforms else None
 
 
 def load_cfg(args: argparse.Namespace) -> Config:
     """Load configuration from YAML file and command line arguments.
-    
+
     Args:
         args: Command line arguments
-        
+
     Returns:
         Populated Config object
     """
@@ -150,17 +150,16 @@ def load_cfg(args: argparse.Namespace) -> Config:
 
     cfg.log.local_log = args.local_log
     args_dict = vars(args)
-    
+
     # Store cfg_file before processing other attributes
     if 'cfg_file' in args_dict and args_dict['cfg_file'] is not None:
         cfg.cfg_file = args_dict['cfg_file']
-    
+
     # Get all class attributes (including nested config objects)
     # Use dir() to get all attributes, filter out private/magic methods
-    cfg_attrs = {attr: getattr(cfg, attr) for attr in dir(cfg) 
+    cfg_attrs = {attr: getattr(cfg, attr) for attr in dir(cfg)
                  if not attr.startswith('_') and not callable(getattr(cfg, attr))}
-    
-    
+
     # Update configuration from YAML and command line arguments
     for key1, val1 in cfg_attrs.items():
         # Skip cfg_file as it's already processed
@@ -179,9 +178,9 @@ def load_cfg(args: argparse.Namespace) -> Config:
         # Handle nested configuration objects (Dataset, Model, Train, Log)
         elif hasattr(val1, "__class__"):
             # Get all attributes of the nested config object, including class variables
-            nested_attrs = {k: v for k, v in vars(val1.__class__).items() 
-                          if not k.startswith('_') and not callable(v)}
-            
+            nested_attrs = {k: v for k, v in vars(val1.__class__).items()
+                            if not k.startswith('_') and not callable(v)}
+
             for key2 in nested_attrs.keys():
                 # First apply config from YAML file
                 if key1 in cfg_dict and isinstance(cfg_dict[key1], dict) and key2 in cfg_dict[key1]:
@@ -206,9 +205,9 @@ def load_cfg(args: argparse.Namespace) -> Config:
         cfg.dataset.inmemory_transform = _build_transforms(cfg.dataset.inmemory_transform, custom_args)
 
     # Print configuration summary
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("Configuration Summary:")
-    print("="*80)
+    print("=" * 80)
     print(f"Config File: {cfg.cfg_file}")
     print(f"\nDataset:")
     print(f"  - Polynomial Method: {cfg.dataset.poly_method}")
@@ -228,16 +227,16 @@ def load_cfg(args: argparse.Namespace) -> Config:
     print(f"  - Weight Decay: {cfg.train.weight_decay}")
     print(f"  - Optimizer: {cfg.train.optimizer}")
     print(f"  - Scheduler: {cfg.train.scheduler}")
-    print("="*80 + "\n")
+    print("=" * 80 + "\n")
     return cfg
 
 
 def sanitize_path(path: Union[str, Path]) -> str:
     """Ensure path is safe and normalized.
-    
+
     Args:
         path: Input path
-        
+
     Returns:
         Normalized absolute path string
     """
@@ -246,12 +245,12 @@ def sanitize_path(path: Union[str, Path]) -> str:
 
 def _build_config_label() -> str:
     """Build configuration label string from current config.
-    
+
     Returns:
         Configuration label string
     """
     cfg_label = f"{Path(cfg.cfg_file).stem}"
-    
+
     if cfg.dataset.poly_method is not None:
         cfg_label += f".{cfg.dataset.poly_method}"
     if cfg.dataset.poly_dim is not None:
@@ -260,7 +259,7 @@ def _build_config_label() -> str:
         cfg_label += f".L{cfg.model.num_layers}"
     if cfg.model.hidden_dim is not None:
         cfg_label += f".H{cfg.model.hidden_dim}"
-    
+
     return cfg_label
 
 
@@ -271,13 +270,13 @@ def create_trainer(
     enable_progress_bar: bool = False
 ) -> Trainer:
     """Create PyTorch Lightning trainer with configured callbacks.
-    
+
     Args:
         timestamp: Timestamp string for save directory
         run_label: Label for this training run
         timer: Timer callback instance
         enable_progress_bar: Whether to enable progress bar
-        
+
     Returns:
         Configured Trainer instance
     """
@@ -315,13 +314,13 @@ def create_trainer(
         log_every_n_steps=cfg.train.log_every_n_steps,
         accumulate_grad_batches=cfg.train.accumulate_grad_batches
     )
-    
+
     return trainer
 
 
 def log_final_results(model: Any, results_allruns: Dict[str, List[float]], total_runs: int) -> None:
     """Log final results with statistics across multiple runs.
-    
+
     Args:
         model: Trained model instance
         results_allruns: Dictionary of metric names to lists of values
@@ -329,12 +328,12 @@ def log_final_results(model: Any, results_allruns: Dict[str, List[float]], total
     """
     print('\n' * 2)
     print(model)
-    
+
     max_memory_gb = torch.cuda.max_memory_reserved() / (1024 ** 3)
     print(f"torch.cuda.max_memory_reserved: {max_memory_gb:.1f}GB")
 
     max_key_len = max(len(key) for key in results_allruns.keys())
-    
+
     print('\n' * 2)
     for key, vals in results_allruns.items():
         padding = ' ' * (max_key_len + 2 - len(key))
