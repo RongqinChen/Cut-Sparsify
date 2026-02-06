@@ -11,6 +11,7 @@ from .compute_2fwl import K2FWLTransform
 from .compute_2fwl_connsp import K2FWLConnSpTransform
 from .compute_2fwl_conndistsp import K2FWLConnDistSpTransform
 from .compute_2fwl_bsr import BSR2FWLTransform
+from .compute_2fwl_bsrd import BSRD2FWLTransform
 
 
 # Transform registry: maps string identifiers to transform classes
@@ -28,6 +29,7 @@ transform_dict = {
     "2fwl_connsp": K2FWLConnSpTransform,  # Connectivity-guided sparsification
     "2fwl_conndistsp": K2FWLConnDistSpTransform,  # Connectivity+distance co-guided sparsification
     "2fwl_bsr": BSR2FWLTransform,  # Block-SPQR-based sparsification
+    "2fwl_bsrd": BSRD2FWLTransform,  # Block-SPQR-and-distance-based sparsification
 
     # Distance-based transforms
     "RD": RD,  # Resistance Distance
