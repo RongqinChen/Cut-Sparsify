@@ -1,0 +1,40 @@
+dataset:
+  path: data
+  enc_dim: 18
+  inmemory_transform:
+    poly:
+      poly_method: rrwp
+    2fwl_bsrd: {threshold: 2}
+  follow_batch: [pair_x]
+model:
+  name: sppgn
+  node_encoder: ogb
+  edge_encoder: ogb
+  pe_encoder: linear
+  hidden_dim: 140
+  num_layers: 2
+  mlp_depth: 1
+  pooling: avg
+  drop_prob: 0.2
+  output_drop_prob: 0.2
+  jk_mode: last
+  task_type: mlpgraphhead
+  num_tasks: 10
+  norm_type: batch
+  act_type: relu
+train:
+  runs: 4
+  save_dir: results/pep_func
+  batch_size: 16
+  num_workers: 0
+  lr: 0.0003
+  min_lr: 0
+  weight_decay: 0.0
+  num_warmup_epochs: 5
+  num_epochs: 200
+  optimizer: AdamW
+  scheduler: cosine_with_warmup
+  test_eval_interval: 5
+log:
+  monitor: val/ap
+  monitor_mode: max
