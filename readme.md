@@ -1,4 +1,4 @@
-# Code for Connectivity-Guided Sparsification of 2-FWL GNNs: Preserving Full Expressivity with Improved Efficiency
+# Code for ``SRE-Sparsify: 3-WL-Expressive GNNs at Near-Linear Cost via Hierarchical Cut Decomposition''
 
 ## Create environment
 
