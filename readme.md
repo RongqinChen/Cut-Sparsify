@@ -20,15 +20,18 @@ pip install rdkit pytorch_lightning
 ### For TUD
 
 ```bash
-for poly_dim in 4 6 8 12 14 16
+for poly_dim in 8
 do
 for num_layers in 4
 do
 for dname in FRANKENSTEIN NCI1 NCI109 ENZYMES  
 do
 
-CUDA_VISIBLE_DEVICES=1 python run_tud.py --cfg configs/bsr_ppgn/tud.bsr_ppgn.poly.yaml \
-    --poly_method rrwp --poly_dim $poly_dim  --dataname $dname | tee results/log_${dname}_${poly_dim}_${num_layers}.txt
+# RSE-Sparsify 
+python run_tud.py --cfg configs/bsr_ppgn/tud.bsr_ppgn.poly.yaml --poly_dim $poly_dim  --dataname $dname 
+
+# RSE-Dist-Sparsify 
+python run_tud.py --cfg configs/bsrd_ppgn/tud.bsrd4_ppgn.poly.yaml --poly_dim $poly_dim  --dataname $dname 
 
 done
 done
@@ -41,12 +44,14 @@ done
 ```bash
 source ~/miniforge3/bin/activate gnn270
 
-for poly_dim in 4 6 8 10 12 14 16
+for poly_dim in 8
 do
 
-CUDA_VISIBLE_DEVICES=0 python run_zinc.py \
-    --cfg configs/bsr_ppgn/zinc.bsr_ppgn.poly.yaml \
-    --poly_dim $poly_dim | tee results/log_zinc_${poly_dim}.txt
+# RSE-Sparsify 
+python run_zinc.py --cfg configs/bsr_ppgn/zinc.bsr_ppgn.poly.yaml --poly_dim $poly_dim 
+
+# RSE-Dist-Sparsify
+python run_zinc.py --cfg configs/bsrd_ppgn/zinc.bsrd4_ppgn.poly.yaml --poly_dim $poly_dim
 
 done
 ```
@@ -56,12 +61,11 @@ done
 ```bash
 source ~/miniforge3/bin/activate gnn270
 
-for poly_dim in 4 6 8 10 12 14 16
+for poly_dim in 8
 do
 
-CUDA_VISIBLE_DEVICES=0 python run_zincfull.py \
-    --cfg configs/bsr_ppgn/zincfull.bsr_ppgn.poly.yaml \
-    --poly_dim $poly_dim | tee results/log_zinc_${poly_dim}.txt
+python run_zincfull.py --cfg configs/bsr_ppgn/zincfull.bsr_ppgn.poly.yaml --poly_dim $poly_dim 
+python run_zincfull.py --cfg configs/bsrd_ppgn/zincfull.bsrd_ppgn.poly.yaml --poly_dim $poly_dim 
 
 done
 ```
@@ -72,57 +76,12 @@ done
 ```bash
 source ~/miniforge3/bin/activate gnn270
 
-for poly_dim in 14 12 10 8 6 4
-do
-
-CUDA_VISIBLE_DEVICES=0 python run_qm9_nogeo.py \
-    --cfg configs/bsr_ppgn/nogeo_qm9.bsr_ppgn.poly.yaml \
-    --poly_dim $poly_dim | tee results/log_qm9_nogeo_${poly_dim}.txt
-
-done
-```
-
-### For PCQM4M
-
-```bash
-source ~/miniforge3/bin/activate gnn270
-
 for poly_dim in 8
 do
 
-CUDA_VISIBLE_DEVICES=0 python run_pcqm4m.py \
-    --cfg configs/bsr_ppgn/pcqm4m.bsr_ppgn.poly.yaml \
-    --poly_dim $poly_dim | tee results/log_pcqm4m_${poly_dim}.txt
+python run_qm9_nogeo.py --cfg configs/bsr_ppgn/nogeo_qm9.bsr_ppgn.poly.yaml --poly_dim $poly_dim 
+python run_qm9_nogeo.py --cfg configs/bsrd_ppgn/nogeo_qm9.bsr_ppgn.poly.yaml --poly_dim $poly_dim 
 
 done
 ```
 
-### For Pep-func
-
-```bash
-source ~/miniforge3/bin/activate gnn270
-
-for poly_dim in 8
-do
-
-CUDA_VISIBLE_DEVICES=0 python run_peptides_func.py \
-    --cfg configs/bsr_ppgn/pep_func.bsr_ppgn.poly.yaml \
-    --poly_dim $poly_dim | tee results/log_func_${poly_dim}.txt
-
-done
-```
-
-### For Pep-struct
-
-```bash
-source ~/miniforge3/bin/activate gnn270
-
-for poly_dim in 8
-do
-
-CUDA_VISIBLE_DEVICES=0 python run_peptides_struct.py \
-    --cfg configs/bsr_ppgn/pep_str.bsr_ppgn.poly.yaml \
-    --poly_dim $poly_dim | tee results/log_struct_${poly_dim}.txt
-
-done
-```
