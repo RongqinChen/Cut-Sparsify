@@ -28,10 +28,10 @@ for dname in FRANKENSTEIN NCI1 NCI109 ENZYMES
 do
 
 # RSE-Sparsify 
-python run_tud.py --cfg configs/bsr_ppgn/tud.bsr_ppgn.poly.yaml --poly_dim $poly_dim  --dataname $dname 
+python run_tud.py --cfg configs/rse_ppgn/tud.rse_ppgn.poly.yaml --poly_dim $poly_dim  --dataname $dname 
 
 # RSE-Dist-Sparsify 
-python run_tud.py --cfg configs/bsrd_ppgn/tud.bsrd4_ppgn.poly.yaml --poly_dim $poly_dim  --dataname $dname 
+python run_tud.py --cfg configs/rsed_ppgn/tud.rsed4_ppgn.poly.yaml --poly_dim $poly_dim  --dataname $dname 
 
 done
 done
@@ -48,10 +48,10 @@ for poly_dim in 8
 do
 
 # RSE-Sparsify 
-python run_zinc.py --cfg configs/bsr_ppgn/zinc.bsr_ppgn.poly.yaml --poly_dim $poly_dim 
+python run_zinc.py --cfg configs/rse_ppgn/zinc.rse_ppgn.poly.yaml --poly_dim $poly_dim 
 
 # RSE-Dist-Sparsify
-python run_zinc.py --cfg configs/bsrd_ppgn/zinc.bsrd4_ppgn.poly.yaml --poly_dim $poly_dim
+python run_zinc.py --cfg configs/rsed_ppgn/zinc.rsed4_ppgn.poly.yaml --poly_dim $poly_dim
 
 done
 ```
@@ -64,8 +64,8 @@ source ~/miniforge3/bin/activate gnn270
 for poly_dim in 8
 do
 
-python run_zincfull.py --cfg configs/bsr_ppgn/zincfull.bsr_ppgn.poly.yaml --poly_dim $poly_dim 
-python run_zincfull.py --cfg configs/bsrd_ppgn/zincfull.bsrd_ppgn.poly.yaml --poly_dim $poly_dim 
+python run_zincfull.py --cfg configs/rse_ppgn/zincfull.rse_ppgn.poly.yaml --poly_dim $poly_dim 
+python run_zincfull.py --cfg configs/rsed_ppgn/zincfull.rsed_ppgn.poly.yaml --poly_dim $poly_dim 
 
 done
 ```
@@ -79,8 +79,8 @@ source ~/miniforge3/bin/activate gnn270
 for poly_dim in 8
 do
 
-python run_qm9_nogeo.py --cfg configs/bsr_ppgn/nogeo_qm9.bsr_ppgn.poly.yaml --poly_dim $poly_dim 
-python run_qm9_nogeo.py --cfg configs/bsrd_ppgn/nogeo_qm9.bsr_ppgn.poly.yaml --poly_dim $poly_dim 
+python run_qm9_nogeo.py --cfg configs/rse_ppgn/nogeo_qm9.rse_ppgn.poly.yaml --poly_dim $poly_dim 
+python run_qm9_nogeo.py --cfg configs/rsed_ppgn/nogeo_qm9.rse_ppgn.poly.yaml --poly_dim $poly_dim 
 
 done
 ```
