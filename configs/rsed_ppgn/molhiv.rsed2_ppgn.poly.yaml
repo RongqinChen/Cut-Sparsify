@@ -1,7 +1,7 @@
 dataset:
   path: data/OGBG
   dataname: ogbg-molhiv
-  enc_dim: 22
+  enc_dim: 8
   inmemory_transform:
     poly:
       poly_method: rrwp
@@ -12,7 +12,7 @@ model:
   node_encoder: ogb
   edge_encoder: ogb
   pe_encoder: linear
-  hidden_dim: 96
+  hidden_dim: 256
   num_layers: 2
   mlp_depth: 2
   pooling: avg
