@@ -100,3 +100,49 @@ python run_ogbg.py --cfg configs/rsed_ppgn/molhiv.rsed4_ppgn.poly.yaml --poly_di
 
 done
 ```
+
+### For Molecular Regresion
+
+```bash
+python run_ogbg.py --cfg configs/sppgn/molesol_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molesol_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/sppgn/molesol_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molesol_poly_dim_${poly_dim}_num_layers_5.log
+
+python run_ogbg.py --cfg configs/sppgn/molfreesolv_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molfreesolv_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/sppgn/molfreesolv_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molfreesolv_poly_dim_${poly_dim}_num_layers_5.log
+
+python run_ogbg.py --cfg configs/sppgn/mollipo_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/mollipo_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/sppgn/mollipo_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/mollipo_poly_dim_${poly_dim}_num_layers_5.log
+
+```
+
+
+```bash
+python run_ogbg.py --cfg configs/rse_ppgn/molesol_reg.rse_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molesol_rse_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/rse_ppgn/molesol_reg.rse_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molesol_rse_poly_dim_${poly_dim}_num_layers_5.log
+
+python run_ogbg.py --cfg configs/rse_ppgn/molfreesolv_reg.rse_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molfreesolv_rse_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/rse_ppgn/molfreesolv_reg.rse_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molfreesolv_rse_poly_dim_${poly_dim}_num_layers_5.log
+
+python run_ogbg.py --cfg configs/rse_ppgn/mollipo_reg.rsed_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/mollipo_rse_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/rse_ppgn/mollipo_reg.rsed_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/mollipo_rse_poly_dim_${poly_dim}_num_layers_5.log
+
+```
+
+
+```bash
+python run_ogbg.py --cfg configs/rse_ppgn/molesol_reg.rsed2_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molesol_rsed2_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/rse_ppgn/molesol_reg.rsed2_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molesol_rsed2_poly_dim_${poly_dim}_num_layers_5.log
+python run_ogbg.py --cfg configs/rse_ppgn/molesol_reg.rsed4_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molesol_rsed4_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/rse_ppgn/molesol_reg.rsed4_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molesol_rsed4_poly_dim_${poly_dim}_num_layers_5.log
+
+python run_ogbg.py --cfg configs/rse_ppgn/molfreesolv_reg.rsed2_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molfreesolv_rsed2_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/rse_ppgn/molfreesolv_reg.rsed2_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molfreesolv_rsed2_poly_dim_${poly_dim}_num_layers_5.log
+python run_ogbg.py --cfg configs/rse_ppgn/molfreesolv_reg.rsed4_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molfreesolv_rsed4_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/rse_ppgn/molfreesolv_reg.rsed4_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molfreesolv_rsed4_poly_dim_${poly_dim}_num_layers_5.log
+
+python run_ogbg.py --cfg configs/rse_ppgn/mollipo_reg.rsed2_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/mollipo_rsed2_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/rse_ppgn/mollipo_reg.rsed2_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/mollipo_rsed2_poly_dim_${poly_dim}_num_layers_5.log
+python run_ogbg.py --cfg configs/rse_ppgn/mollipo_reg.rsed4_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/mollipo_rsed4_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/rse_ppgn/mollipo_reg.rsed4_ppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/mollipo_rsed4_poly_dim_${poly_dim}_num_layers_5.log
+
+```
