@@ -1,4 +1,3 @@
-
 """
 Block-SPQR decomposition for 2-FWL Graph Neural Networks.
 """
@@ -20,7 +19,9 @@ def create_bidirectional_edges(graph: SageGraph) -> List[Tuple[int, int]]:
     return edges
 
 
-def decompose_block_to_spqr(block: SageGraph, result: Dict, stats: Optional[Dict] = None) -> None:
+def decompose_block_to_spqr(
+    block: SageGraph, result: Dict, stats: Optional[Dict] = None
+) -> None:
     spqr = spqr_tree(block)
     for comp_type, comp_graph in spqr.vertices():
         nodes = list(comp_graph.vertices())
@@ -29,20 +30,22 @@ def decompose_block_to_spqr(block: SageGraph, result: Dict, stats: Optional[Dict
             stats[f"{comp_type}_sizes"].append(len(nodes))
 
 
-def decompose_component_to_blocks(component: SageGraph, result: Dict, stats: Optional[Dict] = None) -> None:
+def decompose_component_to_blocks(
+    component: SageGraph, result: Dict, stats: Optional[Dict] = None
+) -> None:
     block_tree = blocks_and_cuts_tree(component)
     blocks = [
         component.subgraph(nodes)
         for node_type, nodes in block_tree.vertices()
         if node_type == "B" and len(nodes) > 2
     ]
-    
+
     block_nodes = [block.vertices() for block in blocks]
     result["block_components"].extend(block_nodes)
-    
+
     if stats is not None:
         stats["block_sizes"].extend([len(nodes) for nodes in block_nodes])
-    
+
     for block in blocks:
         decompose_block_to_spqr(block, result, stats)
 
@@ -57,28 +60,32 @@ def generate_node_triples(result: Dict, num_nodes: int) -> List[Tuple[int, int, 
     return triples
 
 
-def decompose_graph_to_block_spqr(graph: SageGraph, stats: Optional[Dict] = None) -> Dict:
+def decompose_graph_to_block_spqr(
+    graph: SageGraph, stats: Optional[Dict] = None
+) -> Dict:
     num_nodes = graph.num_verts()
     num_edges = graph.num_edges()
-    
+
     if stats is not None:
-        stats.update({
-            "num_nodes": num_nodes,
-            "num_edges": num_edges * 2,
-            "component_sizes": [],
-            "block_sizes": [],
-            "S_sizes": [],
-            "P_sizes": [],
-            "Q_sizes": [],
-            "R_sizes": [],
-        })
-    
+        stats.update(
+            {
+                "num_nodes": num_nodes,
+                "num_edges": num_edges * 2,
+                "component_sizes": [],
+                "block_sizes": [],
+                "S_sizes": [],
+                "P_sizes": [],
+                "Q_sizes": [],
+                "R_sizes": [],
+            }
+        )
+
     component_node_lists = graph.connected_components(sort=False)
     components = [graph.subgraph(nodes) for nodes in component_node_lists]
-    
+
     if stats is not None:
         stats["component_sizes"].extend([len(c.vertices()) for c in components])
-    
+
     edges = create_bidirectional_edges(graph)
     result = {
         "vertices": list(range(num_nodes)),
@@ -90,10 +97,10 @@ def decompose_graph_to_block_spqr(graph: SageGraph, stats: Optional[Dict] = None
         "Q_components": [],
         "R_components": [],
     }
-    
+
     for component in components:
         decompose_component_to_blocks(component, result, stats)
-    
+
     result["node_triples"] = generate_node_triples(result, num_nodes)
     return result
 
@@ -109,8 +116,13 @@ def compute_node_triples(data: Data) -> List[Tuple[int, int, int]]:
     return result["node_triples"]
 
 
-def compute_pair_id_triples(node_triples: List[Tuple[int, int, int]], num_nodes: int) -> List[Tuple[int, int, int]]:
-    return [(a * num_nodes + b, a * num_nodes + c, c * num_nodes + b) for a, b, c in node_triples]
+def compute_pair_id_triples(
+    node_triples: List[Tuple[int, int, int]], num_nodes: int
+) -> List[Tuple[int, int, int]]:
+    return [
+        (a * num_nodes + b, a * num_nodes + c, c * num_nodes + b)
+        for a, b, c in node_triples
+    ]
 
 
 def extract_unique_pair_ids(pair_id_triples: List[Tuple[int, int, int]]) -> List[int]:
@@ -124,19 +136,34 @@ def create_pair_id_mapping(preserved_pair_ids: List[int]) -> Dict[int, int]:
     return {pair_id: idx for idx, pair_id in enumerate(preserved_pair_ids)}
 
 
-def map_pair_triples_to_positions(pair_id_triples: List[Tuple[int, int, int]], pair_id_to_pos: Dict[int, int]) -> torch.Tensor:
+def map_pair_triples_to_positions(
+    pair_id_triples: List[Tuple[int, int, int]], pair_id_to_pos: Dict[int, int]
+) -> torch.Tensor:
     return torch.tensor(
         [[pair_id_to_pos[pair_id] for pair_id in triple] for triple in pair_id_triples],
-        dtype=torch.long
+        dtype=torch.long,
     )
 
 
-def compute_diagonal_positions(num_nodes: int, pair_id_to_pos: Dict[int, int]) -> torch.Tensor:
-    return torch.tensor([pair_id_to_pos[v * num_nodes + v] for v in range(num_nodes)], dtype=torch.long)
+def compute_diagonal_positions(
+    num_nodes: int, pair_id_to_pos: Dict[int, int]
+) -> torch.Tensor:
+    return torch.tensor(
+        [pair_id_to_pos[v * num_nodes + v] for v in range(num_nodes)], dtype=torch.long
+    )
 
 
 class BSR2FWLData(Data):
-    def __init__(self, x=None, edge_index=None, edge_attr=None, y=None, pos=None, time=None, **kwargs):
+    def __init__(
+        self,
+        x=None,
+        edge_index=None,
+        edge_attr=None,
+        y=None,
+        pos=None,
+        time=None,
+        **kwargs,
+    ):
         super().__init__(x, edge_index, edge_attr, y, pos, time, **kwargs)
 
     def __inc__(self, key: str, value, *args, **kwargs):
@@ -164,38 +191,51 @@ class BSR2FWLTransform(BaseTransform):
 
     def forward(self, data: Data) -> BSR2FWLData:
         num_nodes = data.num_nodes
-        
+
         node_triples = compute_node_triples(data)
         pair_id_triples = compute_pair_id_triples(node_triples, num_nodes)
         preserved_pair_ids = extract_unique_pair_ids(pair_id_triples)
         pair_id_to_pos = create_pair_id_mapping(preserved_pair_ids)
-        
+
         preserved_pair_id_t = torch.tensor(preserved_pair_ids, dtype=torch.long)
         preserved_pair_x = data["pair_x"][preserved_pair_id_t, :]
         preserved_pair_index = data["pair_index"][:, preserved_pair_id_t]
-        
-        pair_idx_triples = map_pair_triples_to_positions(pair_id_triples, pair_id_to_pos)
+
+        pair_idx_triples = map_pair_triples_to_positions(
+            pair_id_triples, pair_id_to_pos
+        )
         diag_pos = compute_diagonal_positions(num_nodes, pair_id_to_pos)
-        
+
         store = dict(data.__dict__["_store"])
-        store.update({
-            "num_pairs": preserved_pair_x.size(0),
-            "pair_x": preserved_pair_x,
-            "pair_index": preserved_pair_index,
-            "diag_pos": diag_pos,
-            "triple_index": pair_idx_triples.t(),
-        })
-        
+        store.update(
+            {
+                "num_pairs": preserved_pair_x.size(0),
+                "pair_x": preserved_pair_x,
+                "pair_index": preserved_pair_index,
+                "diag_pos": diag_pos,
+                "triple_index": pair_idx_triples.t(),
+            }
+        )
+
         return BSR2FWLData(**store)
 
 
 def run_tests():
     print("Testing compute_2fwl_bsr.py ...")
-    
+
     nodes = list(range(10))
     edges = [
-        (1, 2), (2, 3), (3, 4), (4, 5), (5, 6),
-        (6, 7), (7, 8), (8, 9), (9, 0), (8, 1), (6, 1),
+        (1, 2),
+        (2, 3),
+        (3, 4),
+        (4, 5),
+        (5, 6),
+        (6, 7),
+        (7, 8),
+        (8, 9),
+        (9, 0),
+        (8, 1),
+        (6, 1),
     ]
 
     nx_graph = NetworkXGraph()
