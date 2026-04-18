@@ -1,6 +1,6 @@
 dataset:
   path: data
-  enc_dim: 8
+  enc_dim: 4
   inmemory_transform:
     poly:
       poly_method: rrwp
@@ -11,7 +11,7 @@ model:
   node_encoder: ogb
   edge_encoder: ogb
   pe_encoder: linear
-  hidden_dim: 128
+  hidden_dim: 64
   num_layers: 2
   mlp_depth: 1
   pooling: avg
