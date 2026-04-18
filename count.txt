@@ -10,20 +10,20 @@ NCI109 			Average number of triples per graph: 46971.98    O(n^3)
 
 
 ===================== Co-Sparsify 3-WL/2-FWL Triples=======
-zinc 			Average number of triples per graph: 1546.83     times the number of nodes: 64.23
-zincfull 		Average number of triples per graph: 1547.16     times the number of nodes: 64.21
-qm9 			Average number of triples per graph: 762.53      times the number of nodes: 41.54
-ENZYMES 		Average number of triples per graph: 40944.02    times the number of nodes: 840.88
-FRANKENSTEIN	Average number of triples per graph: 2066.64     times the number of nodes: 92.35
-NCI1 			Average number of triples per graph: 4953.39     times the number of nodes: 132.52
-NCI109 			Average number of triples per graph: 4894.34     times the number of nodes: 132.33
+zinc 			Average number of triples per graph: 1546.83
+zincfull 		Average number of triples per graph: 1547.16
+qm9 			Average number of triples per graph: 762.53
+ENZYMES 		Average number of triples per graph: 40944.02
+FRANKENSTEIN	Average number of triples per graph: 2066.64
+NCI1 			Average number of triples per graph: 4953.39
+NCI109 			Average number of triples per graph: 4894.34
 
 
 ===================== RSE-Sparsify 3-WL/2-FWL Triples=======
-zinc 			Average number of triples per graph: 445.57      times the number of nodes: 18.96
-zincfull 		Average number of triples per graph: 444.96      times the number of nodes: 18.94
-qm9 			Average number of triples per graph: 187.66      times the number of nodes: 10.57
-ENZYMES			Average number of triples per graph: 7408.65     times the number of nodes: 164.26
-FRANKENSTEIN	Average number of triples per graph: 391.18      times the number of nodes: 19.47
-NCI1 			Average number of triples per graph: 871.79      times the number of nodes: 25.06
-NCI109 			Average number of triples per graph: 856.00      times the number of nodes: 24.77
+zinc 			Average number of triples per graph: 445.57
+zincfull 		Average number of triples per graph: 444.96
+qm9 			Average number of triples per graph: 187.66
+ENZYMES			Average number of triples per graph: 7408.65
+FRANKENSTEIN	Average number of triples per graph: 391.18
+NCI1 			Average number of triples per graph: 871.79
+NCI109 			Average number of triples per graph: 856.00

@@ -1,0 +1,36 @@
+dataset:
+  path: data/OGBG
+  dataname: ogbg-molhiv
+  enc_dim: 8
+  inmemory_transform:
+    poly:
+      poly_method: rrwp
+    2fwl_bsrd: {threshold: 4}
+  follow_batch: [pair_x]
+model:
+  name: sppgn
+  node_encoder: ogb
+  edge_encoder: ogb
+  pe_encoder: linear
+  hidden_dim: 256
+  num_layers: 2
+  mlp_depth: 2
+  pooling: avg
+  drop_prob: 0.5
+  jk_mode: last
+  task_type: graph_classification
+  num_tasks: 1
+  norm_type: batch
+  act_type: relu
+train:
+  runs: 10
+  save_dir: results/molhiv
+  batch_size: 128
+  num_workers: 0
+  lr: 1e-3
+  min_lr: 1e-6
+  weight_decay: 1e-5
+  num_warmup_epochs: 5
+  num_epochs: 200
+  optimizer: AdamW
+  scheduler: cosine_with_warmup
