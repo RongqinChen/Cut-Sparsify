@@ -9,7 +9,7 @@ pip install torch==2.7.0  --index-url https://download.pytorch.org/whl/cu128
 pip install torch_geometric==2.6.1
 pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-2.7.0+cu128.html
 pip install yacs ogb networkx torchmetrics
-pip install rdkit pytorch_lightning
+pip install rdkit lightning
 ```
 
 

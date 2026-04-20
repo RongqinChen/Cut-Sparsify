@@ -1,0 +1,38 @@
+dataset:
+  path: data/OGBG
+  dataname: ogbg-mollipo
+  poly_dim: 8
+  inmemory_transform:
+    poly:
+      poly_method: rrwp
+    2fwl_bsrd: {threshold: 2}
+  follow_batch: [pair_x]
+model:
+  name: sppgn
+  node_encoder: ogb
+  edge_encoder: ogb
+  pe_encoder: poly
+  hidden_dim: 128
+  num_layers: 2
+  mlp_depth: 2
+  pooling: sum_avg
+  drop_prob: 0.0
+  output_drop_prob: 0.0
+  jk_mode: last
+  task_type: graph_regression
+  num_tasks: 1
+  norm_type: batch
+  act_type: relu
+  max_num_nodes: 115
+train:
+  runs: 5
+  save_dir: results/mollipo
+  batch_size: 32
+  num_workers: 0
+  lr: 1e-3
+  min_lr: 1e-6
+  weight_decay: 1e-5
+  num_warmup_epochs: 20
+  num_epochs: 500
+  optimizer: AdamW
+  scheduler: cosine_with_warmup

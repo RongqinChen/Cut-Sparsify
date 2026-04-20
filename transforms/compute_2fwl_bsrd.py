@@ -48,16 +48,20 @@ def get_sr_components(graph: SageGraph) -> List[SageGraph]:
                 tree = spqr_tree(block)
 
                 for comp_type, comp_graph in tree.vertices():
-                    if comp_type in ('S', 'R'):
+                    if comp_type in ("S", "R"):
                         sr_components.append(comp_graph)
 
     return sr_components
 
 
-def update_distance_in_sr_components(dist: np.ndarray, sr_components: List[SageGraph]) -> np.ndarray:
+def update_distance_in_sr_components(
+    dist: np.ndarray, sr_components: List[SageGraph]
+) -> np.ndarray:
     """Refine distance matrix using paths within SR components."""
     for comp_graph in sr_components:
-        for u, neighbors in floyd_warshall(comp_graph, paths=False, distances=True).items():
+        for u, neighbors in floyd_warshall(
+            comp_graph, paths=False, distances=True
+        ).items():
             for v, d in neighbors.items():
                 dist[u, v] = dist[v, u] = min(dist[u, v], d)
 
@@ -96,9 +100,7 @@ def build_graph_from_data(data: Data) -> SageGraph:
 
 
 def filter_triples_by_distance(
-    node_triples: List[Tuple[int, int, int]],
-    dist: np.ndarray,
-    threshold: int
+    node_triples: List[Tuple[int, int, int]], dist: np.ndarray, threshold: int
 ) -> List[Tuple[int, int, int]]:
     """Filter triples where all pairwise distances are below threshold."""
     filtered = []
@@ -108,12 +110,16 @@ def filter_triples_by_distance(
     return filtered
 
 
-def convert_triples_to_pairs(triples: List[Tuple[int, int, int]], n: int) -> List[Tuple[int, int, int]]:
+def convert_triples_to_pairs(
+    triples: List[Tuple[int, int, int]], n: int
+) -> List[Tuple[int, int, int]]:
     """Convert node triples to pair-based representation."""
     return [(a * n + b, a * n + c, c * n + b) for a, b, c in triples]
 
 
-def build_pair_mapping(pair_triples: List[Tuple[int, int, int]]) -> Tuple[List[int], Dict[int, int]]:
+def build_pair_mapping(
+    pair_triples: List[Tuple[int, int, int]],
+) -> Tuple[List[int], Dict[int, int]]:
     """Create mapping between pair IDs and indices."""
     unique_pairs = sorted({p for triple in pair_triples for p in triple})
     pair_map = {p: i for i, p in enumerate(unique_pairs)}
@@ -125,7 +131,7 @@ def build_output_tensors(
     unique_pairs: List[int],
     pair_map: Dict[int, int],
     pair_triples: List[Tuple[int, int, int]],
-    n: int
+    n: int,
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
     """Construct tensors for 2-FWL message passing."""
     pair_ids = torch.tensor(unique_pairs, dtype=torch.long)
@@ -133,8 +139,7 @@ def build_output_tensors(
     pair_index = data["pair_index"][:, pair_ids]
 
     triple_index = torch.tensor(
-        [[pair_map[p] for p in triple] for triple in pair_triples],
-        dtype=torch.long
+        [[pair_map[p] for p in triple] for triple in pair_triples], dtype=torch.long
     ).t()
 
     diag_pos = torch.tensor([pair_map[i * n + i] for i in range(n)], dtype=torch.long)
@@ -186,7 +191,9 @@ class BSRD2FWLTransform(BaseTransform):
         self_triples = get_self_triples(n)
         node_triples = spqr_triples + edge_triples + self_triples
 
-        filtered_triples = filter_triples_by_distance(node_triples, dist, self.threshold)
+        filtered_triples = filter_triples_by_distance(
+            node_triples, dist, self.threshold
+        )
 
         pair_triples = convert_triples_to_pairs(filtered_triples, n)
 
@@ -197,16 +204,17 @@ class BSRD2FWLTransform(BaseTransform):
         )
 
         output = dict(data._store)
-        output.update({
-            "num_pairs": len(unique_pairs),
-            "pair_x": pair_x,
-            "pair_index": pair_index,
-            "diag_pos": diag_pos,
-            "triple_index": triple_index,
-        })
+        output.update(
+            {
+                "num_pairs": len(unique_pairs),
+                "pair_x": pair_x,
+                "pair_index": pair_index,
+                "diag_pos": diag_pos,
+                "triple_index": triple_index,
+            }
+        )
 
         return BSRD2FWLData(**output)
-
 
 
 def run_tests():
@@ -216,93 +224,97 @@ def run_tests():
     # Create a sample graph
     nodes = list(range(10))
     edges = [
-        (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), 
+        (1, 2), (2, 3), (3, 4), (4, 5), (5, 6),
         (6, 7), (7, 8), (8, 9), (9, 0), (8, 1), (6, 1),
     ]
 
     # Create SageGraph directly
     sage_graph = SageGraph([nodes, edges], format="vertices_and_edges")
-    
-    print(f"Graph has {sage_graph.num_verts()} vertices and {sage_graph.num_edges()} edges")
-    
+
+    print(
+        f"Graph has {sage_graph.num_verts()} vertices and {sage_graph.num_edges()} edges"
+    )
+
     # Test distance computation
     print("\nTesting distance computation...")
     dist = compute_distances(sage_graph)
     print(f"Distance matrix shape: {dist.shape}")
-    print(f"Sample distances: dist[0,1]={dist[0,1]}, dist[0,5]={dist[0,5]}")
-    
+    print(f"Sample distances: dist[0,1]={dist[0, 1]}, dist[0,5]={dist[0, 5]}")
+
     # Test SR component extraction
     print("\nTesting SR component extraction...")
     sr_components = get_sr_components(sage_graph)
     print(f"Found {len(sr_components)} SR components")
     for i, comp in enumerate(sr_components):
         print(f"  Component {i}: {comp.num_verts()} vertices, {comp.num_edges()} edges")
-    
+
     # Test distance refinement
     print("\nTesting distance refinement in SR components...")
     refined_dist = update_distance_in_sr_components(dist.copy(), sr_components)
     print(f"Distance matrix updated")
-    
+
     # Test triple generation
     print("\nTesting triple generation...")
     sr_triples = get_sr_triples(sr_components)
     edge_triples = get_edge_triples(sage_graph)
     self_triples = get_self_triples(len(nodes))
-    
+
     print(f"SR triples: {len(sr_triples)}")
     print(f"Edge triples: {len(edge_triples)}")
     print(f"Self triples: {len(self_triples)}")
-    
+
     all_triples = sr_triples + edge_triples + self_triples
     print(f"Total triples: {len(all_triples)}")
-    
+
     # Test triple filtering
     print("\nTesting triple filtering with threshold=5...")
     filtered = filter_triples_by_distance(all_triples, refined_dist, threshold=5)
     print(f"Filtered triples: {len(filtered)}")
-    
+
     # Test pair conversion
     print("\nTesting pair conversion...")
     pair_triples = convert_triples_to_pairs(filtered, len(nodes))
     print(f"Pair triples: {len(pair_triples)}")
-    
+
     # Test pair mapping
     print("\nTesting pair mapping...")
     unique_pairs, pair_map = build_pair_mapping(pair_triples)
     print(f"Unique pairs: {len(unique_pairs)}")
-    
+
     # Test full transform with PyG Data
     print("\nTesting full BSRD2FWL transform...")
     num_nodes = len(nodes)
     edge_index = torch.tensor(edges, dtype=torch.long).t()
     x = torch.randn(num_nodes, 16)
-    
+
     # Create pair_x and pair_index for the test
     num_pairs = num_nodes * num_nodes
     pair_x = torch.randn(num_pairs, 32)
-    pair_index = torch.stack([
-        torch.arange(num_nodes).repeat_interleave(num_nodes),
-        torch.arange(num_nodes).repeat(num_nodes)
-    ])
-    
+    pair_index = torch.stack(
+        [
+            torch.arange(num_nodes).repeat_interleave(num_nodes),
+            torch.arange(num_nodes).repeat(num_nodes),
+        ]
+    )
+
     data = Data(
         x=x,
         edge_index=edge_index,
         num_nodes=num_nodes,
         pair_x=pair_x,
-        pair_index=pair_index
+        pair_index=pair_index,
     )
-    
+
     transform = BSRD2FWLTransform(threshold=5)
     transformed_data = transform(data)
-    
+
     print(f"Transformed data:")
     print(f"  num_pairs: {transformed_data.num_pairs}")
     print(f"  pair_x shape: {transformed_data.pair_x.shape}")
     print(f"  pair_index shape: {transformed_data.pair_index.shape}")
     print(f"  triple_index shape: {transformed_data.triple_index.shape}")
     print(f"  diag_pos shape: {transformed_data.diag_pos.shape}")
-    
+
     print("\nAll tests completed successfully!")
 
 
