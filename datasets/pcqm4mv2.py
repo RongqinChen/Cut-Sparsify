@@ -41,7 +41,7 @@ class PCQM4Mv2(PygPCQM4Mv2Dataset):
         time_start = time.perf_counter()
         data_list = [inmemory_transform(data) for data in tqdm(data_list)]
         time_elapsed = time.perf_counter() - time_start
-        print(f"Took {time_elapsed:.2f}s.")
+        print(f"Transformation completed in {time_elapsed:.2f}s")
         self._data_list.clear()
         del self._data_list
         self._data_list = data_list

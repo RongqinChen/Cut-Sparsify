@@ -5,7 +5,7 @@ dataset:
   inmemory_transform:
     poly:
       poly_method: rrwp
-    2fwl_connsp: {threshold: 4}
+    2fwl_bsrd: {threshold: 4}
   follow_batch: [pair_x]
 model:
   name: sppgn

@@ -100,3 +100,20 @@ python run_ogbg.py --cfg configs/rsed_ppgn/molhiv.rsed4_ppgn.poly.yaml --poly_di
 
 done
 ```
+
+### For Mol-reg
+```bash
+for poly_dim in 8
+do
+
+python run_ogbg.py --cfg configs/sppgn/molesol_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molesol_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/sppgn/molesol_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molesol_poly_dim_${poly_dim}_num_layers_5.log
+
+python run_ogbg.py --cfg configs/sppgn/molfreesolv_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molfreesolv_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/sppgn/molfreesolv_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molfreesolv_poly_dim_${poly_dim}_num_layers_5.log
+
+python run_ogbg.py --cfg configs/sppgn/mollipo_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/mollipo_poly_dim_${poly_dim}_num_layers_3.log
+python run_ogbg.py --cfg configs/sppgn/mollipo_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/mollipo_poly_dim_${poly_dim}_num_layers_5.log
+
+done
+```

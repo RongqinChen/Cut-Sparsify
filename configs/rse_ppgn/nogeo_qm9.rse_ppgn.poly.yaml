@@ -4,7 +4,7 @@ dataset:
   inmemory_transform:
     poly:
       poly_method: rrwp
-    2fwl_connsp: {}
+    2fwl_bsr: {}
     qm9_input_transform: {}
   follow_batch: [pair_x]
 model:
