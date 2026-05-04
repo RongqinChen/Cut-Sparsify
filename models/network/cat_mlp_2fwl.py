@@ -50,7 +50,7 @@ class CatMLP_Layer(nn.Module):
         # x2_2 = self.mlp2(x2)
 
         # Compute triple interactions and aggregate
-        x3 = self.mlp1(torch.cat(x2[idx1], x2[idx2], dim=-1))
+        x3 = self.mlp1(torch.cat((x2[idx1], x2[idx2]), dim=-1))
         x3_agg = scatter_add(x3, idx0, dim=0, dim_size=x2.size(0))
 
         # # Apply signed square root if enabled
