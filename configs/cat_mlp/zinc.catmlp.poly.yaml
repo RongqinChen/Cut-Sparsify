@@ -13,7 +13,7 @@ model:
   node_encoder: type_dict
   edge_encoder: type_dict
   pe_encoder: poly
-  hidden_dim: 80
+  hidden_dim: 88
   num_layers: 10
   mlp_depth: 2
   pooling: sum_avg
