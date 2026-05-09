@@ -104,17 +104,31 @@ done
 
 ### For Mol-reg
 ```bash
+mkdir -p results
+
 for poly_dim in 8
 do
+for L in 3 5
+do
 
-python run_ogbg.py --cfg configs/sppgn/molesol_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molesol_poly_dim_${poly_dim}_num_layers_3.log
-python run_ogbg.py --cfg configs/sppgn/molesol_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molesol_poly_dim_${poly_dim}_num_layers_5.log
+# Co-Sparsify
+python run_ogbg.py --cfg configs/sppgn/molesol_reg.sppgn.poly.yaml          --poly_dim $poly_dim --num_layers $L | tee -a results/molesol_sppgn_poly${poly_dim}_layer${poly_dim}.log
+python run_ogbg.py --cfg configs/sppgn/molfreesolv_reg.sppgn.poly.yaml      --poly_dim $poly_dim --num_layers $L | tee -a results/molfreesolv_sppgn_poly${poly_dim}_layer${poly_dim}.log
+python run_ogbg.py --cfg configs/sppgn/mollipo_reg.sppgn.poly.yaml          --poly_dim $poly_dim --num_layers $L | tee -a results/mollipo_sppgn_poly${poly_dim}_layer${poly_dim}.log
 
-python run_ogbg.py --cfg configs/sppgn/molfreesolv_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/molfreesolv_poly_dim_${poly_dim}_num_layers_3.log
-python run_ogbg.py --cfg configs/sppgn/molfreesolv_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/molfreesolv_poly_dim_${poly_dim}_num_layers_5.log
+# RSE-Sparsify 
+python run_ogbg.py --cfg configs/rse_ppgn/molesol_reg.rse_ppgn.poly.yaml        --poly_dim $poly_dim --num_layers $L | tee -a results/molesol_rse_poly${poly_dim}_layer${poly_dim}.log
+python run_ogbg.py --cfg configs/rse_ppgn/molfreesolv_reg.rse_ppgn.poly.yaml    --poly_dim $poly_dim --num_layers $L | tee -a results/molfreesolv_rse_poly${poly_dim}_layer${poly_dim}.log
+python run_ogbg.py --cfg configs/rse_ppgn/mollipo_reg.rse_ppgn.poly.yaml        --poly_dim $poly_dim --num_layers $L | tee -a results/mollipo_rse_poly${poly_dim}_layer${poly_dim}.log
 
-python run_ogbg.py --cfg configs/sppgn/mollipo_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 3 | tee -a results/mollipo_poly_dim_${poly_dim}_num_layers_3.log
-python run_ogbg.py --cfg configs/sppgn/mollipo_reg.sppgn.poly.yaml --poly_dim $poly_dim --num_layers 5 | tee -a results/mollipo_poly_dim_${poly_dim}_num_layers_5.log
+# RSE-Dist-Sparsify 
+python run_ogbg.py --cfg configs/rsed_ppgn/molesol_reg.rsed2_ppgn.poly.yaml        --poly_dim $poly_dim --num_layers $L | tee -a results/molesol_rsed2_poly${poly_dim}_layer${poly_dim}.log
+python run_ogbg.py --cfg configs/rsed_ppgn/molesol_reg.rsed4_ppgn.poly.yaml        --poly_dim $poly_dim --num_layers $L | tee -a results/molesol_rsed4_poly${poly_dim}_layer${poly_dim}.log
+python run_ogbg.py --cfg configs/rsed_ppgn/molfreesolv_reg.rsed2_ppgn.poly.yaml    --poly_dim $poly_dim --num_layers $L | tee -a results/molfreesolv_rsed2_poly${poly_dim}_layer${poly_dim}.log
+python run_ogbg.py --cfg configs/rsed_ppgn/molfreesolv_reg.rsed4_ppgn.poly.yaml    --poly_dim $poly_dim --num_layers $L | tee -a results/molfreesolv_rsed4_poly${poly_dim}_layer${poly_dim}.log
+python run_ogbg.py --cfg configs/rsed_ppgn/mollipo_reg.rsed2_ppgn.poly.yaml        --poly_dim $poly_dim --num_layers $L | tee -a results/mollipo_rsed2_poly${poly_dim}_layer${poly_dim}.log
+python run_ogbg.py --cfg configs/rsed_ppgn/mollipo_reg.rsed4_ppgn.poly.yaml        --poly_dim $poly_dim --num_layers $L | tee -a results/mollipo_rsed4_poly${poly_dim}_layer${poly_dim}.log
 
+done
 done
 ```
