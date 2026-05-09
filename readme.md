@@ -62,7 +62,7 @@ done
 ```bash
 source ~/miniforge3/bin/activate gnn270
 
-for poly_dim in 8
+for poly_dim in 12
 do
 
 python run_zincfull.py --cfg configs/rse_ppgn/zincfull.rse_ppgn.poly.yaml --poly_dim $poly_dim 
