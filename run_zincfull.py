@@ -50,7 +50,7 @@ def main():
         datamodule = TestOnValLightningData(train_set, valid_set, test__set)
         litmodel = TestOnValLightningModel(model, criterion, evaluator)
         timer = Timer(duration=dict(weeks=4))
-        trainer = create_trainer(timestamp, f"{args.dataname}_{ridx}", timer)
+        trainer = create_trainer(timestamp, f"zincfull_{ridx}", timer)
         trainer.fit(litmodel, datamodule=datamodule)
         result_dict = trainer.test(litmodel, datamodule=datamodule, ckpt_path="best")[0]
         result_dict["avg_train_time_epoch"] = timer.time_elapsed("train") / cfg.train.num_epochs
