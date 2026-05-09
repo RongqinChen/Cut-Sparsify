@@ -20,7 +20,7 @@ pip install rdkit lightning
 ### For TUD
 
 ```bash
-for poly_dim in 8
+for poly_dim in 6 8 10 12 14 16
 do
 for num_layers in 4
 do
@@ -31,6 +31,7 @@ do
 python run_tud.py --cfg configs/rse_ppgn/tud.rse_ppgn.poly.yaml --poly_dim $poly_dim  --dataname $dname 
 
 # RSE-Dist-Sparsify 
+python run_tud.py --cfg configs/rsed_ppgn/tud.rsed2_ppgn.poly.yaml --poly_dim $poly_dim  --dataname $dname 
 python run_tud.py --cfg configs/rsed_ppgn/tud.rsed4_ppgn.poly.yaml --poly_dim $poly_dim  --dataname $dname 
 
 done
